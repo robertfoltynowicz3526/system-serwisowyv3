@@ -23,12 +23,36 @@
     </header>
 
     <main>
-        <div id="pulpit" class="tab-content">
-            <h2>Pulpit i Ewidencja Czasu Pracy</h2>
-            <div id="kalendarz-podsumowanie" class="summary-container-subtle"></div>
-            <div id="kalendarz" class="calendar-container"></div>
+        <div id="pulpit" class="tab-content active">
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Aktywne Zlecenia</h3>
+                    <p class="dashboard-value" id="active-orders-count">0</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Przychód M-c (netto)</h3>
+                    <p class="dashboard-value" id="monthly-net-revenue">0.00 zł</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Produkty do Zamówienia</h3>
+                    <p class="dashboard-value" id="low-stock-count">0</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Najbliższe Zlecenia/Spotkania</h3>
+                    <ul class="dashboard-list" id="upcoming-events-list">
+                        <li>Brak</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr>
+            <div class="calendar-container">
+                <h2>Kalendarz Zleceń / Spotkań</h2>
+                <div id='calendar'></div>
+            </div>
         </div>
-<div id="klienci" class="tab-content">
+        
+        <div id="klienci" class="tab-content">
             <h2>Baza Klientów</h2>
             <div class="form-section">
                 <h3>Dodaj nowego klienta</h3>
@@ -59,7 +83,7 @@
             </div>
             <div class="table-section"><h3>Lista Maszyn</h3><div id="lista-maszyn"></div></div>
         </div>
-<div id="zlecenia" class="tab-content">
+        <div id="zlecenia" class="tab-content">
             <h2>Zlecenia</h2>
             <div class="form-section">
                 <h3>Dodaj nowe zlecenie</h3>
@@ -105,7 +129,53 @@
             </div>
             <div class="table-section"><h3>Stan Magazynowy</h3><table id="magazyn-table"><thead><tr><th>Index</th><th>Nazwa</th><th>Ilość (szt.)</th><th>Ilość (Litry)</th><th>Klient</th><th>Akcje</th></tr></thead><tbody id="magazyn-lista"></tbody></table></div>
         </div>
-</main>
+        <div id="zlecenia" class="tab-content">
+            <h2>Zlecenia</h2>
+            <div class="form-section">
+                <h3>Dodaj nowe zlecenie</h3>
+                <form id="zlecenie-form">
+                    <div class="form-group"><label for="zlecenie-klient-select">1. Wybierz klienta (opcjonalnie):</label><select id="zlecenie-klient-select"><option value="">-- Wybierz --</option></select></div>
+                    <div class="form-group"><label for="zlecenie-maszyna-select">2. Wybierz maszynę (opcjonalnie):</label><select id="zlecenie-maszyna-select" disabled><option value="">-- Najpierw wybierz klienta --</option></select></div>
+                    <div class="form-group"><label for="nr-zlecenia">Nr zlecenia / Nazwa dla szybkiego zlecenia:</label><input type="text" id="nr-zlecenia" required></div>
+                    <div class="form-group"><label for="opis-usterki">Opis usterki:</label><textarea id="opis-usterki" rows="3"></textarea></div>
+                    <div class="form-group"><label for="motogodziny">Motogodziny (opcjonalnie):</label><input type="number" id="motogodziny" step="0.1"></div>
+                    <button type="submit">Dodaj Zlecenie</button>
+                </form>
+            </div>
+
+            <div class="form-section" style="padding: 1rem;">
+                <input type="search" id="szukaj-zlecenia" placeholder="Szukaj po kliencie, maszynie, opisie, nr zlecenia...">
+            </div>
+
+            <div class="table-section"><h3>Aktywne zlecenia</h3><div id="aktywne-zlecenia-lista"></div></div><hr>
+            
+            <div class="table-section">
+                <div class="collapsible-header" id="toggle-ukonczone">
+                    <h3>Zakończone zlecenia</h3>
+                    <span class="arrow">▶</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="summary-controls">
+                        <label for="miesiac-summary">Podsumowanie dla miesiąca:</label>
+                        <input type="month" id="miesiac-summary">
+                        <button id="export-zlecenia-btn" class="btn-edit">Eksportuj</button>
+                    </div>
+                    <div id="summary-container"></div>
+                    <div id="ukonczone-zlecenia-lista"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="magazyn" class="tab-content">
+            <h2>Magazyn</h2>
+            <div class="magazyn-forms">
+                <div class="form-section"><h3>Dodaj produkt</h3><form id="magazyn-form"><div class="form-group"><label for="item-index">Index:</label><input type="text" id="item-index" required></div><div class="form-group"><label for="item-name">Nazwa:</label><input type="text" id="item-name" required></div><div class="form-group"><label for="item-ilosc">Ilość:</label><input type="number" step="1" id="item-ilosc" required></div><div class="form-group"><label for="item-klient">Klient:</label><input type="text" id="item-klient"></div><button type="submit">Dodaj</button></form></div>
+                <div class="form-section"><h3>Masowe dodawanie</h3><form id="bulk-add-form"><div class="form-group"><label for="bulk-klient">Klient:</label><input type="text" id="bulk-klient" required></div><div class="form-group"><label for="bulk-items">Produkty:</label><textarea id="bulk-items" rows="5" placeholder="Index;Nazwa;Ilość" required></textarea></div><button type="submit">Dodaj</button></form></div>
+                <div class="form-section"><h3>Zarządzanie Olejami</h3><div class="form-group"><label for="oil-type">Typ Oleju:</label><select id="oil-type"><option value="HYGARD">HYGARD</option><option value="PLUS50">PLUS50</option><option value="COOLGARD">COOLGARD</option><option value="EXTGARD">EXTGARD</option></select></div><div class="form-group"><label for="oil-container-size">Pojemnik (L):</label><select id="oil-container-size"><option value="209">209L</option><option value="55">55L</option><option value="20">20L</option></select></div><button type="button" id="add-oil-btn" class="btn-add">Dodaj Olej</button><hr style="margin-top:1rem; margin-bottom: 1rem;"><h4>Przelicznik</h4><div class="form-group"><label for="converter-litry">Litry:</label><input type="number" step="0.01" id="converter-litry"></div><p>Wynik: <strong id="result-sztuki">0.00 szt.</strong></p><hr style="margin-top:1rem; margin-bottom: 1rem;"><div class="form-group"><label for="converter-sztuki">Sztuki:</label><input type="number" step="0.01" id="converter-sztuki"></div><p>Wynik: <strong id="result-litry">0.00 L</strong></p></div>
+            </div>
+            <div class="table-section"><h3>Stan Magazynowy</h3><table id="magazyn-table"><thead><tr><th>Index</th><th>Nazwa</th><th>Ilość (szt.)</th><th>Ilość (Litry)</th><th>Klient</th><th>Akcje</th></tr></thead><tbody id="magazyn-lista"></tbody></table></div>
+        </div>
+        </main>
     
     <div id="kalendarz-modal" class="modal">
         <div class="modal-content">
