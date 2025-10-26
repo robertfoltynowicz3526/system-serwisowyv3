@@ -453,8 +453,8 @@ function initializeApp() {
             }
         });
 
-        aktywneZleceniaLista.innerHTML = aktywneHtml ? `<ul>${aktywneHtml}</ul>` : "<p>Brak aktywnych zleceň pasujących do wyszukiwania.</p>"; // Zmieniony komunikat
-        ukonczoneZleceniaLista.innerHTML = ukonczoneHtml ? `<ul>${ukonczoneHtml}</ul>` : "<p>Brak ukończonych zleceň pasujących do wyszukiwania.</p>"; // Zmieniony komunikat
+        aktywneZleceniaLista.innerHTML = aktywneHtml ? `<ul>${aktywneHtml}</ul>` : "<p>Brak aktywnych zleceň pasujących do wyszukiwania.</p>";
+        ukonczoneZleceniaLista.innerHTML = ukonczoneHtml ? `<ul>${ukonczoneHtml}</ul>` : "<p>Brak ukończonych zleceň pasujących do wyszukiwania.</p>";
     }
 
     async function dodajZlecenie(event) {
@@ -493,7 +493,6 @@ function initializeApp() {
     async function obslugaListyZlecen(event) {
         const li = event.target.closest('li'); if (!li) return;
         const docId = li.dataset.id;
-        // Znajdź zlecenie w oryginalnej (nieprzefiltrowanej) tablicy
         const zlecenie = wszystkieZlecenia.find(z => z.id === docId);
 
         if (event.target.classList.contains('delete-btn')) {
