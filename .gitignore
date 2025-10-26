@@ -1,0 +1,8 @@
+# Ignoruj zależności
+node_modules
+
+# Ignoruj stary, niebezpieczny plik z kluczami
+firebase-config.js
+
+# Ignoruj lokalne zmienne
+.env
